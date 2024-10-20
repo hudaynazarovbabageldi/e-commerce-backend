@@ -1,0 +1,180 @@
+paths: 
+  /api/v1/lists: 
+    get: 
+      tags: [Lists]
+      summary: Get Lists
+      security: 
+        - user: []
+      responses: 
+        200:
+          description: Registered save token
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                   type: object
+                   properties: 
+                      uuid:
+                        type: string
+                      title: 
+                        type: string
+                      completedTaskCount: 
+                        type: integer
+                      taskCount:  
+                        type: integer
+        400:
+          description: Bad request, title is required
+        401: 
+          $ref: '#/components/responses/UnauthorizedError'
+        404: 
+          description: You don't have a list by your sender id
+        500:
+          description: Unexpected error in server side
+    post: 
+      tags: [Lists]
+      summary: Create list
+      security: 
+        - user: [] 
+      requestBody: 
+        content:
+            application/json:
+               schema:
+                  type: object
+                  properties:
+                    title: 
+                      type: string
+      responses:
+        201: 
+          description: Registered. Save token
+          content:
+             application/json:
+                schema:
+                  type: object
+                  properties:
+                    uuid:
+                      type: string
+                      format: uuid
+                    name: 
+                      type: string
+                    taskCount:
+                      type: integer
+                    completedTaskCount:
+                      type: integer
+        400:
+          description: Bad request.name is required
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        500: 
+          description: Unexpected error in server side
+  /api/v1/lists/{uuid}:
+    put: 
+      tags: [Lists]
+      summary: Update list name
+      security:
+        - user: []
+      parameters: 
+        - in: path
+          name: uuid
+          schema:
+             type: string
+          required: true
+      requestBody: 
+        content:
+          application/json:
+          scheme:
+            type: object
+            properties: 
+              title:
+                type: string
+      responses: 
+        200: 
+          description: Registered. Save token
+          content: 
+            application/json: 
+               schema: 
+                  type: object
+                  properties: 
+                    status:
+                      type: string
+                      example: success
+                    message: 
+                      type: string
+                      message: List name changed
+        400: 
+          description: Bad request. new name and id are required
+        401: 
+          $ref: '#/components/responses/UnauthorizedError'
+        404: 
+          description: You don't have a list by your sender id
+        500: 
+          description: Unexpected error in server side
+    delete: 
+      tags: [Lists]
+      summary: Delete list 
+      security: 
+        - user: []
+      parameters:
+        - in: path
+          name: uuid
+          schema: 
+             type: string
+          required: true
+      responses: 
+        200: 
+          description: Registered. Save token
+          content: 
+            application/json: 
+               scheme: 
+                  type: object
+                  properties: 
+                      status: 
+                        type: string
+                        example: success
+                      message: 
+                        type: string
+                        example: List deleted
+        400: 
+          description: Bad request. uuid is required
+        401: 
+          $ref: '#/components/responses/UnauthorizedError'
+        404: 
+          description: You don't have a list by your sender id
+        500: 
+           description: Unexpected error in server side
+  /api/v1/lists/{uuid}/tasks:
+    get:
+      tags: [Lists]
+      summary: Get tasks belong to List
+      security: 
+        - user: []
+      parameters:
+        - in: path
+          name: uuid
+          schema: 
+            type: string
+          required: true
+      responses: 
+        200:
+          description: Registered. Save token
+          content: 
+             application/json:
+               schema: 
+                  type: array
+                  items: 
+                    type: array
+                    properties: 
+                      uuid: 
+                        type: string
+                      text: 
+                        type: string
+                      completed: 
+                        type: boolean
+        400: 
+          description: Bad request.name is required
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description: You don't have a list by your sender id
+        500:
+          description: Unexpected error in server side

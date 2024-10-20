@@ -1,0 +1,83 @@
+paths:
+  /api/v1/users/register:
+    post:
+      tags: [Register & login]
+      summary: User register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: babageldi
+                email:
+                  type: string
+                  example: hudaynazarovbabageldi1@gmail.com
+                password:
+                  type: string
+                  example: 123
+      responses:
+        200:
+          description: Registered. Save token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        400:
+          description: Bad request. (email, username, password are required)
+        409:
+          description: Some fields are unique
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseRegisterConflict'
+        500:
+          description: Unexpected error in server side
+  /api/v1/users/login:
+    post:
+      tags: [Register & login]
+      summary: User login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: babageldi
+                password:
+                  type: string
+                  example: 123
+      responses:
+        200:
+          description: Logged in. Save token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        400:
+          description: username or password is wrong
+        500:
+          description: Unexpected error in server side
+components:
+  schemas:
+    ResponseRegisterConflict:
+      type: object
+      properties:
+        status:
+          type: string
+          example: conflict
+        conflictProperties:
+          type: array
+          items:
+            type: string
+            enum: [username, email]

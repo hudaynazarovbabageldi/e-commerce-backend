@@ -1,0 +1,23 @@
+components:
+  schemas:
+    List: 
+      type: object
+      description: List is the group of todos. Example my-work-todos, my-personal-todos. Every list belongs to one user.
+      required: 
+        - title
+      properties: 
+        uuid: 
+          type: string
+          format: uuid
+        title: 
+          type: string
+        user: 
+          type: object
+          $ref: '#components/schemas/User'
+        createdAt: 
+          type: string
+          format: date-time
+        updatedAt: 
+          type: string
+          format: date-time
+       

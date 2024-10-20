@@ -1,0 +1,25 @@
+paths: 
+  /api/v1/tasks:
+    get: 
+      tags: [Tasks]
+      summary: Get tasks
+      security: 
+        - user: []
+      responses: 
+        200:
+          description: Registered. Save token
+          content:
+             application/json:
+                schema: 
+                  type: array
+                  items:
+                    type: object
+                    properties: 
+                      text:
+                        type: string
+                      completed: 
+                        type: boolean
+                      listUuid:
+                        type: string
+                        format: uuid
+        
