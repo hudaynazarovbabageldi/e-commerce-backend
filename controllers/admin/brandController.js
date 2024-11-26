@@ -4,7 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const AppError = require('../../utils/appError');
 const catchAsync = require('../../utils/catchAsync');
-const { Banners } = require('../../db/models');
+const { Brands } = require('../../db/models');
 
 const storage = multer.memoryStorage();
 
@@ -13,13 +13,13 @@ exports.upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // Optional 5mb
 });
 
-exports.addBanner = catchAsync(async (req, res, next) => {
-  console.log('add banner req: ', req.body);
+exports.addBrand = catchAsync(async (req, res, next) => {
+  console.log('add brand req: ', req.body);
   const { link, name } = req.body;
   if (!link || !name) {
     return next(new AppError('link and name is required', 401));
   }
-  const newBanner = await Banners.create(req.body);
+  const newBanner = await Brands.create(req.body);
   return res.status(201).send(newBanner);
 });
 exports.editBanner = catchAsync(async (req, res, next) => {
@@ -34,15 +34,15 @@ exports.editBanner = catchAsync(async (req, res, next) => {
 });
 
 exports.uploadBannerImageTm = catchAsync(async (req, res, next) => {
-  const banner_id = req.params.id;
-  const banner = await Banners.findOne({ where: { id: banner_id } });
-  console.log('banner: ', banner);
+  const brand_id = req.params.id;
+  const brand = await Brands.findOne({ where: { id: brand_id } });
+  console.log('brand: ', brand);
   console.log('req.file: ', req.file);
 
-  if (!banner) return next(new AppError('Banner not found with that id', 404));
+  if (!banner) return next(new AppError('Brand not found with that id', 404));
   if (!req.file) return res.status(400).json({ message: 'No image file provided' });
 
-  const image_tm = `${banner_id}_banner-tm.webp`;
+  const image_tm = `${brand_id}_brand-tm.webp`;
 
   const staticDir = path.resolve(__dirname + '../../static');
   console.log('staticDir: ', staticDir);

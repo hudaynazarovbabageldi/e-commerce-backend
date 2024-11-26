@@ -90,3 +90,10 @@ exports.tokenChecker = async (req, res, next) => {
   req.admin = freshAdmin;
   next();
 };
+
+// {
+//   "username": "Babon",
+//   "email": "babydriverlogic01@gmail.com",
+//   "password": "1001"
+
+//  }
