@@ -15,29 +15,28 @@ exports.upload = multer({
 
 exports.addBrand = catchAsync(async (req, res, next) => {
   console.log('add brand req: ', req.body);
-  const { link, name } = req.body;
-  if (!link || !name) {
-    return next(new AppError('link and name is required', 401));
+  const { name_tm, name_ru, name_en } = req.body;
+  if (!name_tm || !name_en || !name_ru) {
+    return next(new AppError('name_tm, name_ru, name_en are required', 401));
   }
-  const newBanner = await Brands.create(req.body);
-  return res.status(201).send(newBanner);
-});
-exports.editBanner = catchAsync(async (req, res, next) => {
-  const banner_id = req.params.id;
-  const banner = await Banners.findOne({ where: { id: banner_id } });
-
-  if (!banner) {
-    return next(new AppError('Banner did not find with that id', 404));
-  }
-  await banner.update(req.body);
-  return res.status(200).send(banner);
+  const newBrand = await Brands.create(req.body);
+  return res.status(201).send(newBrand);
 });
 
-exports.uploadBannerImageTm = catchAsync(async (req, res, next) => {
+exports.editBrand = catchAsync(async (req, res, next) => {
   const brand_id = req.params.id;
   const brand = await Brands.findOne({ where: { id: brand_id } });
-  console.log('brand: ', brand);
-  console.log('req.file: ', req.file);
+
+  if (!brand) {
+    return next(new AppError('Brand did not find with that id', 404));
+  }
+  await brand.update(req.body);
+  return res.status(200).send(brand);
+});
+
+exports.uploadBrandImageTm = catchAsync(async (req, res, next) => {
+  const brand_id = req.params.id;
+  const brand = await Brands.findOne({ where: { id: brand_id } });
 
   if (!banner) return next(new AppError('Brand not found with that id', 404));
   if (!req.file) return res.status(400).json({ message: 'No image file provided' });
@@ -55,7 +54,7 @@ exports.uploadBannerImageTm = catchAsync(async (req, res, next) => {
 
   try {
     const buffer = await sharp(req.file.buffer).webp().toBuffer();
-    // console.log('buffer: ', buffer);
+
     await sharp(buffer).toFile(filePath);
   } catch (err) {
     return next(new AppError(`Error saving image: ${err.message}`, 500));
@@ -66,7 +65,7 @@ exports.uploadBannerImageTm = catchAsync(async (req, res, next) => {
   return res.status(201).send(banner);
 });
 
-exports.uploadBannerImageRu = catchAsync(async (req, res, next) => {
+exports.uploadBrandImageRu = catchAsync(async (req, res, next) => {
   const banner_id = req.params.id;
   const banner = await Banners.findOne({ where: { id: banner_id } });
   req.files = Object.values(req.files);
@@ -86,7 +85,7 @@ exports.uploadBannerImageRu = catchAsync(async (req, res, next) => {
   return res.status(201).send(banner);
 });
 
-exports.deleteBanner = catchAsync(async (req, res, next) => {
+exports.deleteBrand = catchAsync(async (req, res, next) => {
   const banner_id = req.params.id;
   console.log('banner_id: ', banner_id);
 

@@ -6,5 +6,6 @@ router.post('/register', register);
 router.post('/login', login);
 
 router.use('/banners', require('./routes/bannerRouter'));
+router.use('/brands', require('./routes/brandRouter'));
 
 module.exports = router;
