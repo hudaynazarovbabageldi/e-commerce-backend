@@ -1,4 +1,3 @@
-// Send error info for production
 const sendErrorProduction = (err, res) => {
   if (err.isOperational) {
     res.status(err.statusCode).json({
@@ -12,7 +11,6 @@ const sendErrorProduction = (err, res) => {
     });
   }
 };
-// Send more error info for handling error
 const sendErrorDevolopment = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,

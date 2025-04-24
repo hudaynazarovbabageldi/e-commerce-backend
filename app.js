@@ -7,12 +7,10 @@ const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const errorHandling = require('./utils/errorHandling');
 
-// Docs
 const swaggerOptions = require('./swaggers/index.js');
 const specs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 
-// Apply middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
@@ -20,7 +18,6 @@ app.use(helmet());
 app.use(cors({ credentials: true, origin: '*' }));
 app.use('/static', express.static('public'));
 
-// Routes
 app.use('/api/admin', require('./routes/admin/adminRouter'));
 app.use('/api/public', require('./routes/public/publicRouter'));
 
